@@ -25,7 +25,16 @@ camera.position.z = 3;
 const controls = new OrbitControls(camera, canvas);
 scene.add(camera);
 const renderer = new THREE.WebGLRenderer({ canvas: canvas });
-renderer.setSize(renderSize.w, renderSize.h);
+
+window.addEventListener("resize", () => {
+  renderSize.w = window.innerWidth;
+  renderSize.h = window.innerHeight;
+
+  camera.aspect = renderSize.w / renderSize.h;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(renderSize.w, renderSize.h);
+});
 
 const newFrame = () => {
   controls.update();
