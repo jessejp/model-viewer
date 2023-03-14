@@ -1,5 +1,6 @@
 import "./style.css";
 import * as THREE from "three";
+import { debugMesh } from "./gui";
 
 
 //Scene and Camera initialize
@@ -15,10 +16,15 @@ scene.add(new THREE.AxesHelper());
 const MaterialBasic = new THREE.MeshBasicMaterial({color: 0xaaaaaa})
 const MeshDefaultCube = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), MaterialBasic)
 scene.add(MeshDefaultCube);
+debugMesh(MeshDefaultCube, 'Default Cube')
 
 camera.position.z = 3;
 scene.add(camera);
 const renderer = new THREE.WebGLRenderer({ canvas: canvas });
 renderer.setSize(renderSize.w, renderSize.h);
 
+const newFrame = () => {
 renderer.render(scene, camera)
+window.requestAnimationFrame(newFrame);
+}
+newFrame();
