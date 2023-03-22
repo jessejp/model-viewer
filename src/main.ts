@@ -12,8 +12,27 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, renderSize.w / renderSize.h);
 scene.add(new THREE.AxesHelper());
 
+// Texture
+const loadingManager = new THREE.LoadingManager();
+const textureLoader = new THREE.TextureLoader(loadingManager); 
+const colorTexture = textureLoader.load("/textures/door/color.jpg");
+colorTexture.wrapS = THREE.MirroredRepeatWrapping;
+colorTexture.wrapT = THREE.MirroredRepeatWrapping;
+/* colorTexture.repeat.x = 2;
+colorTexture.repeat.y = 3;
+colorTexture.rotation = Math.PI * 0.25; */
+const alphaTexture = textureLoader.load("/textures/door/alpha.jpg");
+const heightTexture = textureLoader.load("/textures/door/height.jpg");
+const normalTexture = textureLoader.load("/textures/door/normal.jpg");
+const ambientOcclusionTexture = textureLoader.load("/textures/door/ambientOcclusion.jpg");
+const metalnessTexture = textureLoader.load("/textures/door/metalness.jpg");
+const roughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
+
 // Default Cube
-const MaterialBasic = new THREE.MeshBasicMaterial({ color: 0xaaaaaa });
+const MaterialBasic = new THREE.MeshStandardMaterial();
+MaterialBasic.map = colorTexture;
+MaterialBasic.roughness = 0;
+MaterialBasic.metalness = 0.5;
 const MeshDefaultCube = new THREE.Mesh(
   new THREE.BoxGeometry(1, 1, 1),
   MaterialBasic
@@ -21,10 +40,15 @@ const MeshDefaultCube = new THREE.Mesh(
 scene.add(MeshDefaultCube);
 debugMesh(MeshDefaultCube, "Default Cube");
 
+// Camera and Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+const pointLight = new THREE.PointLight(0xffffff, 0.8);
+pointLight.position.set(2, 3, 4);
 camera.position.z = 3;
 const controls = new OrbitControls(camera, canvas);
-scene.add(camera);
+scene.add(camera, ambientLight, pointLight);
 const renderer = new THREE.WebGLRenderer({ canvas: canvas });
+renderer.setSize(renderSize.w, renderSize.h);
 
 window.addEventListener("resize", () => {
   renderSize.w = window.innerWidth;
