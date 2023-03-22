@@ -1,7 +1,7 @@
 import "./style.css";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { debugMesh } from "./gui";
+import { debugMaterial, debugMesh } from "./gui";
 
 //Scene and Camera initialize
 const elementCanvas = document.createElement("canvas");
@@ -30,15 +30,23 @@ const roughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
 
 // Default Cube
 const MaterialBasic = new THREE.MeshStandardMaterial();
+MaterialBasic.side = THREE.DoubleSide;
 MaterialBasic.map = colorTexture;
 MaterialBasic.roughness = 0;
 MaterialBasic.metalness = 0.5;
+debugMaterial(MaterialBasic, "Material Basic");
+
 const MeshDefaultCube = new THREE.Mesh(
   new THREE.BoxGeometry(1, 1, 1),
   MaterialBasic
 );
-scene.add(MeshDefaultCube);
+
+const MeshPlane = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), MaterialBasic);
+MeshPlane.position.x = -2;
+
+scene.add(MeshDefaultCube, MeshPlane);
 debugMesh(MeshDefaultCube, "Default Cube");
+debugMesh(MeshPlane, "Default Plane");
 
 // Camera and Lighting
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);

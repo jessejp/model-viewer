@@ -1,5 +1,5 @@
 import GUI from "lil-gui";
-import type { Mesh, Euler } from "three";
+import type { Mesh, Euler, Material } from "three";
 import gsap from "gsap";
 
 const gui = new GUI();
@@ -23,7 +23,11 @@ export const debugMesh = (mesh: Mesh, folderName = "General") => {
   folder.add(mesh.position, "y").min(-5).max(5).step(0.05);
   folder.add(mesh.position, "z").min(-5).max(5).step(0.05);
 
-  folder.addColor(mesh.material, "color");
-  folder.add(mesh.material, "roughness").min(0).max(1).step(0.1);
-  folder.add(mesh.material, "metalness").min(0).max(1).step(0.1);
 };
+
+export const debugMaterial = (material: Material, folderName = "General") => {
+    const folder = gui.addFolder(folderName);
+    folder.addColor(material, "color");
+    folder.add(material, "roughness").min(0).max(1).step(0.1);
+    folder.add(material, "metalness").min(0).max(1).step(0.1);
+}
